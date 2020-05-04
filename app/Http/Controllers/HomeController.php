@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Server;
+use xPaw\SourceQuery\SourceQuery;
 
 class HomeController extends Controller
 {
@@ -13,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -24,5 +26,30 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function servers(Server $server, SourceQuery $Query)
+    {
+        $servers = $server->all();
+
+        foreach ($servers as $server)
+        {
+            try {
+                $Query->Connect($server->ip, $server->port, 3, SourceQuery::SOURCE);
+                //$Query->SetUseOldGetChallengeMethod( true ); // Use this when players/rules retrieval fails on games like Starbound
+
+                $server->info    = $Query->GetInfo();
+                $server->players = $Query->GetPlayers();
+                $server->rules   = $Query->GetRules();
+
+            } catch (Exception $e) {
+                $Exception = $e;
+            } finally {
+
+                $Query->Disconnect();
+            }
+        }
+
+        return view('servers', compact('servers'));
     }
 }
