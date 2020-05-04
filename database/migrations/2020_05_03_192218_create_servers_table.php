@@ -16,8 +16,9 @@ class CreateServersTable extends Migration
         Schema::create('servers', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->integer('ip');
+            $table->bigInteger('ip');
             $table->string('port', 8);
+            $table->string('img', 255);
             $table->timestamps();
         });
     }

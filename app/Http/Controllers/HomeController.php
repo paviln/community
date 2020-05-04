@@ -32,12 +32,9 @@ class HomeController extends Controller
     {
         $servers = $server->all();
 
-        foreach ($servers as $server)
-        {
+        foreach ($servers as $server) {
             try {
-                $Query->Connect($server->ip, $server->port, 3, SourceQuery::SOURCE);
-                //$Query->SetUseOldGetChallengeMethod( true ); // Use this when players/rules retrieval fails on games like Starbound
-
+                $Query->Connect($server->ip, $server->port, 1, SourceQuery::SOURCE);
                 $server->info    = $Query->GetInfo();
                 $server->players = $Query->GetPlayers();
                 $server->rules   = $Query->GetRules();

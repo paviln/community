@@ -5,9 +5,10 @@
     <div class="row justify-content-around">
     @foreach($servers as $server)
     <div class="col-lg-4">
+    <?php dd($server);?>
             <div class="card text-black">
                 <div class="card">
-                    <img src="https://screenshots.gamebanana.com/img/ss/maps/5036dc3d2b16d.jpg" class="card-img-top" alt="...">
+                    <img src="{{ $server->img }}" class="card-img-top" alt="...">
                     <div class="card-body">
                         <h5 class="card-title">{{ $server->name }} : {{ $server->info['HostName'] }}</h5>
                         <p class="card-text">Map: {{ $server->info['Map'] }}</p>

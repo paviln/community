@@ -11,7 +11,7 @@ class Server extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'ip', 'port'];
+    protected $fillable = ['name', 'ip', 'port', 'img'];
 
     /**
      * The accessors to append to the model's array form.
