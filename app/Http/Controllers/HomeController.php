@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+
 use App\Models\Server;
-use xPaw\SourceQuery\SourceQuery;
 
 class HomeController extends Controller
 {
@@ -28,25 +29,13 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function servers(Server $server, SourceQuery $Query)
+    public function servers(Server $server)
     {
-        $servers = $server->all();
-
-        foreach ($servers as $server) {
-            try {
-                $Query->Connect($server->ip, $server->port, 1, SourceQuery::SOURCE);
-                $server->info    = $Query->GetInfo();
-                $server->players = $Query->GetPlayers();
-                $server->rules   = $Query->GetRules();
-
-            } catch (Exception $e) {
-                $Exception = $e;
-            } finally {
-
-                $Query->Disconnect();
-            }
+        if (Cache::has('gameServers')) {
+            $servers = Cache::get('gameServers');
+        } else {
+            $servers = $server->all();
         }
-
         return view('servers', compact('servers'));
     }
 }
