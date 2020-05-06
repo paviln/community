@@ -21,4 +21,7 @@ Route::get('/servers', 'HomeController@servers')->name('servers');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware('superuser')->name('admin.')->prefix('admin')->namespace('Admin')->group(function () {
+    Route::get('/', 'DashboardController')->name('dashboard');
+    Route::get('/servers', 'ServerController@index')->name('servers');
+});
