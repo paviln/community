@@ -24,5 +24,6 @@ Auth::routes();
 Route::middleware('superuser')->name('admin.')->prefix('admin')->namespace('Admin')->group(function () {
     Route::get('/', 'DashboardController')->name('dashboard');
     Route::resource('servers', 'ServerController');
+    Route::resource('users', 'UserController');
 });
 

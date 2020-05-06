@@ -102,7 +102,7 @@ class ServerController extends Controller
         $server->save();
         ProcessServers::dispatch();
 
-        return redirect('/admin/servers')->with('success', 'Contact updated!');
+        return redirect('/admin/servers')->with('success', 'Server updated!');
     }
 
     /**
@@ -118,6 +118,6 @@ class ServerController extends Controller
         $server->delete();
         ProcessServers::dispatch();
 
-        return redirect('/admin/servers')->with('success', 'Contact deleted!');
+        return redirect('/admin/servers')->with('success', 'Server deleted!');
     }
 }
