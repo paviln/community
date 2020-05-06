@@ -11,6 +11,7 @@
                             <img src="{{ $server->img }}" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $server->name }} : {{ $server->info['HostName'] }}</h5>
+                                <p class="card-text">Game: {{ $server->info['ModDesc'] }}</p>
                                 <p class="card-text">Map: {{ $server->info['Map'] }}</p>
                                 <p class="card-text">
                                     Players: {{ $server->info['Players'].'/'.$server->info['MaxPlayers'] }}</p>
