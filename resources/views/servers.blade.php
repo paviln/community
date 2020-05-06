@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="container">
-        <?php dump($servers) ?>
         <div class="row justify-content-around">
             @foreach($servers as $server)
                 <div class="col-lg-4">
