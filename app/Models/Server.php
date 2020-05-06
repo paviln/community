@@ -18,11 +18,12 @@ class Server extends Model
      *
      * @var array
      */
-    protected $appends = ['info'];
+    protected $appends = ['info', 'players', 'rules', 'ping'];
 
     /**
      * Get the user's full name.
      *
+     * @param $value
      * @return string
      */
     public function getIpAttribute($value)

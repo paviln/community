@@ -37319,17 +37319,6 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "./resources/js/app.js":
-/*!*****************************!*\
-  !*** ./resources/js/site.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-
-/***/ }),
-
 /***/ "./resources/js/bootstrap.js":
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
@@ -37375,7 +37364,29 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/sass/home.scss":
+/***/ "./resources/js/site.js":
+/*!******************************!*\
+  !*** ./resources/js/site.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+/***/ }),
+
+/***/ "./resources/sass/admin.scss":
+/*!***********************************!*\
+  !*** ./resources/sass/admin.scss ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./resources/sass/site.scss":
 /*!**********************************!*\
   !*** ./resources/sass/site.scss ***!
   \**********************************/
@@ -37387,14 +37398,15 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /***/ }),
 
 /***/ 0:
-/*!**************************************************************!*\
-  !*** multi ./resources/js/site.js ./resources/sass/site.scss ***!
-  \**************************************************************/
+/*!*******************************************************************************************!*\
+  !*** multi ./resources/js/site.js ./resources/sass/site.scss ./resources/sass/admin.scss ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/resources/js/site.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/resources/sass/site.scss */"./resources/sass/home.scss");
+__webpack_require__(/*! /var/www/resources/js/site.js */"./resources/js/site.js");
+__webpack_require__(/*! /var/www/resources/sass/site.scss */"./resources/sass/site.scss");
+module.exports = __webpack_require__(/*! /var/www/resources/sass/admin.scss */"./resources/sass/admin.scss");
 
 
 /***/ })

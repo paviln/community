@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Server;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+
+use App\Jobs\ProcessServers;
+use App\Models\Server;
 
 class ServerController extends Controller
 {
@@ -14,14 +15,11 @@ class ServerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Server $server)
+    public function index()
     {
-        if (Cache::has('gameServers')) {
-            $servers = Cache::get('gameServers');
-        } else {
-            $servers = $server->all();
-        }
-        return view('servers', compact('servers'));
+        $servers = Server::all();
+
+        return view('admin.servers.index', compact('servers'));
     }
 
     /**
@@ -31,7 +29,7 @@ class ServerController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.servers.create');
     }
 
     /**
@@ -42,7 +40,25 @@ class ServerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate
+        $request->validate([
+            'name' => 'required',
+            'ip' => 'required',
+            'port' => 'required',
+            'img' => 'required',
+        ]);
+
+        // process
+        $server = new Server([
+            'name' => $request->get('name'),
+            'ip' => $request->get('ip'),
+            'port' => $request->get('port'),
+            'img' => $request->get('img')
+        ]);
+        $server->save();
+        ProcessServers::dispatch();
+
+        return redirect('/admin/servers')->with('success', 'Server created!');
     }
 
     /**
@@ -51,9 +67,12 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public
+    function edit($id)
     {
-        //
+        $server = Server::find($id);
+
+        return view('admin.servers.edit', compact('server'));
     }
 
     /**
@@ -61,11 +80,29 @@ class ServerController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
+    public
+    function update(Request $request, $id)
     {
-        //
+        // validate
+        $request->validate([
+            'name' => 'required',
+            'ip' => 'required',
+            'port' => 'required',
+            'img' => 'required',
+        ]);
+
+        // process
+        $server = Server::find($id);
+        $server->name = $request->get('name');
+        $server->ip = $request->get('ip');
+        $server->port = $request->get('port');
+        $server->img = $request->get('img');
+        $server->save();
+        ProcessServers::dispatch();
+
+        return redirect('/admin/servers')->with('success', 'Contact updated!');
     }
 
     /**
@@ -74,8 +111,13 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public
+    function destroy($id)
     {
-        //
+        $server = Server::find($id);
+        $server->delete();
+        ProcessServers::dispatch();
+
+        return redirect('/admin/servers')->with('success', 'Contact deleted!');
     }
 }

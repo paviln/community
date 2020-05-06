@@ -1,33 +1,47 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-around">
-            <?php dump($servers);?>
-            @foreach($servers as $server)
-                <div class="col-lg-4">
-                    <div class="card text-black">
-                        <div class="card">
-                            <img src="{{ $server->img }}" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $server->name }} : {{ $server->info['HostName'] }}</h5>
-                                <p class="card-text">Game: {{ $server->info['ModDesc'] }}</p>
-                                <p class="card-text">Map: {{ $server->info['Map'] }}</p>
-                                <p class="card-text">
-                                    Players: {{ $server->info['Players'].'/'.$server->info['MaxPlayers'] }}</p>
-                                <p class="card-text">IP: {{ $server->ip.":".$server->port}}</p>
-                                <div class=" text-center">
-                                    <a href="steam://connect/{{ $server->ip.':'.$server->port}}"
-                                       class="btn btn-primary">Connect to server</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        @endforeach
-                <?php
-                    // <input name="_method" type="hidden" value="PUT">
-                ?>
+    @if(session()->get('success'))
+        <div class="alert alert-success">
+            {{ session()->get('success') }}
+        </div>
+    @endif
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Servers</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <a type="button" class="btn btn-sm btn-outline-secondary"
+                   href="{{ route('admin.servers.create') }}">Create server</a>
+            </div>
         </div>
     </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Ip</th>
+            <th scope="col">Port</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($servers as $server)
+            <tr>
+                <td>{{ $server->name }}</td>
+                <td>{{ $server->ip }}</td>
+                <td>{{ $server->port }}</td>
+                <td>
+                    <a class="btn btn-primary float-left mr-2" href="{{ route('admin.servers.edit',$server->id)}}">Edit</a>
+                    <form class="float-left" action="{{ route('admin.servers.destroy', $server->id)}}"
+                          method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 @endsection

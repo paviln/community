@@ -30,21 +30,28 @@ class ProcessServers implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param  Server  $server
+     * @param  SourceQuery  $sourceQuery
      * @return void
      */
     public function handle(Server $server, SourceQuery $sourceQuery)
     {
         $servers = $server->all();
 
-        foreach ($servers as $srv) {
-            try {
+        foreach ($servers as $srv)
+        {
+            try
+            {
                 $sourceQuery->Connect($srv->ip, $srv->port, 15, SourceQuery::SOURCE);
                 $srv->info = $sourceQuery->GetInfo();
                 $srv->players = $sourceQuery->GetPlayers();
                 $srv->rules = $sourceQuery->GetRules();
-            } catch (Exception $e) {
+                $srv->ping = $sourceQuery->Ping();
+            } catch (Exception $e)
+            {
                 echo $e->getMessage();
-            } finally {
+            } finally
+            {
                 $sourceQuery->Disconnect();
             }
         }

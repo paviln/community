@@ -1,0 +1,9 @@
+.form {
+    width: 450px;
+}
+
+@include media-breakpoint-down(sm) {
+    .form {
+        width: 100%;
+    }
+}
