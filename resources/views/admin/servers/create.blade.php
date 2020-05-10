@@ -3,22 +3,33 @@
 @section('content')
     <div
         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Create Server</h1>
+        <h1 class="h2">Add Server</h1>
     </div>
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div><br/>
-    @endif
     <form class="form" method="post" action="{{ route('admin.servers.store') }}">
         @csrf
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" name="name">
+        </div>
+        <div class="form-group">
+            <label for="game">Game</label>
+            <select id="game" class="form-control" name="game_id">
+                <option disabled selected value> -- select an option --</option>
+                @foreach ($games as $game)
+                    <option class="{{ str_replace(' ', '_', $game->name) }}" onclick="showCategories(this)"
+                            value="{{ $game->id }}">{{ $game->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="game">Category</label>
+            <select class="form-control" id="category" name="category_id">
+                <option disabled selected value> -- select an option --</option>
+                @foreach ($categories as $category)
+                    <option class="{{ str_replace(' ', '_', $category->game->name) }}"
+                            value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="row">
             <div class="col-sm-8">

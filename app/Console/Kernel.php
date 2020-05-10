@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new ProcessServers)->everyMinute();
+        $schedule->command('telescope:prune')->daily();
     }
 
     /**

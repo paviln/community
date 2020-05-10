@@ -19,6 +19,8 @@ class CreateServersTable extends Migration
             $table->bigInteger('ip');
             $table->string('port', 8);
             $table->string('img', 255);
+            $table->foreignId('game_id')->constrained();
+            $table->foreignId('category_id')->constrained();
             $table->timestamps();
         });
     }

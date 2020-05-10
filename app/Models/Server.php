@@ -11,7 +11,7 @@ class Server extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'ip', 'port', 'img'];
+    protected $fillable = ['name', 'ip', 'port', 'img', 'game_id', 'category_id'];
 
     /**
      * The accessors to append to the model's array form.
@@ -20,8 +20,44 @@ class Server extends Model
      */
     protected $appends = ['info', 'players', 'rules', 'ping'];
 
+    public function getInfoAttribute($value)
+    {
+        return $value ? $value : null;
+    }
+
+    public function getPlayersAttribute($value)
+    {
+        return $value ? $value : null;
+    }
+
+    public function getRulesAttribute($value)
+    {
+        return $value ? $value : null;
+    }
+
+    public function getPingAttribute($value)
+    {
+        return $value ? $value : null;
+    }
+
     /**
-     * Get the user's full name.
+     * Get the game that belongs to the server.
+     */
+    public function game()
+    {
+        return $this->belongsTo('App\Models\Game');
+    }
+
+    /**
+     * Get the category that belongs to the server.
+     */
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
+
+    /**
+     * Get the ip as int
      *
      * @param $value
      * @return string
@@ -32,7 +68,7 @@ class Server extends Model
     }
 
     /**
-     * Set the user's first name.
+     * Set the ip as dot format
      *
      * @param  string  $value
      * @return void

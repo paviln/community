@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Game;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,10 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
-
 use xPaw\SourceQuery\SourceQuery;
-
-use App\Models\Server;
 
 class ProcessServers implements ShouldQueue
 {
@@ -30,31 +28,54 @@ class ProcessServers implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  Server  $server
-     * @param  SourceQuery  $sourceQuery
+     * @param  Game  $gameModel
      * @return void
      */
-    public function handle(Server $server, SourceQuery $sourceQuery)
+    public function handle(Game $gameModel)
     {
-        $servers = $server->all();
+        $platforms = config('platforms');
 
-        foreach ($servers as $srv)
-        {
-            try
-            {
-                $sourceQuery->Connect($srv->ip, $srv->port, 15, SourceQuery::SOURCE);
+        // Retrieve games with at least one server
+        $games = $gameModel->with([
+            'categories' => function ($query) {
+                $query->with('servers');
+            }
+        ])->with([
+            'servers' => function ($query) {
+                $query->with('category');
+            }
+        ])->withCount('servers')->get();
+
+        foreach ($games as $game) {
+            if (isset($game->servers)) {
+                switch ($game->platform) {
+                    case $platforms['Source']:
+                        $game->servers = $this->processSourceServers($game->servers);
+                        break;
+                }
+            }
+        }
+
+        Cache::put('gameServers', $games, now()->addMinutes(5));
+    }
+
+    private function processSourceServers($servers)
+    {
+        $sourceQuery = new SourceQuery();
+        foreach ($servers as $srv) {
+            try {
+                $sourceQuery->Connect($srv->ip, $srv->port, 5, SourceQuery::SOURCE);
                 $srv->info = $sourceQuery->GetInfo();
                 $srv->players = $sourceQuery->GetPlayers();
                 $srv->rules = $sourceQuery->GetRules();
                 $srv->ping = $sourceQuery->Ping();
-            } catch (Exception $e)
-            {
-                echo $e->getMessage();
-            } finally
-            {
+            } catch (Exception $e) {
+                continue;
+            } finally {
                 $sourceQuery->Disconnect();
             }
         }
-        Cache::put('gameServers', $servers, now()->addMinutes(5));
+
+        return $servers;
     }
 }

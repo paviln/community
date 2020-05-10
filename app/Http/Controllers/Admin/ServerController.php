@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Category;
 
+use App\Http\Requests\ServerRequest;
 use App\Jobs\ProcessServers;
 use App\Models\Server;
+use App\Models\Game;
+
 
 class ServerController extends Controller
 {
@@ -29,31 +32,31 @@ class ServerController extends Controller
      */
     public function create()
     {
-        return view('admin.servers.create');
+        $games = Game::all();
+        $categories = Category::all();
+
+        return view('admin.servers.create', compact('games', 'categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  ServerRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ServerRequest $request)
     {
         // validate
-        $request->validate([
-            'name' => 'required',
-            'ip' => 'required',
-            'port' => 'required',
-            'img' => 'required',
-        ]);
+        $validated = $request->validated();
 
         // process
         $server = new Server([
-            'name' => $request->get('name'),
-            'ip' => $request->get('ip'),
-            'port' => $request->get('port'),
-            'img' => $request->get('img')
+            'name' => $validated['name'],
+            'ip' => $validated['ip'],
+            'port' => $validated['port'],
+            'img' => $validated['img'],
+            'game_id' => $validated['game_id'],
+            'category_id' => $validated['category_id']
         ]);
         $server->save();
         ProcessServers::dispatch();
@@ -68,11 +71,14 @@ class ServerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public
-    function edit($id)
-    {
+    function edit(
+        $id
+    ) {
         $server = Server::find($id);
+        $games = Game::all();
+        $categories = Category::all();
 
-        return view('admin.servers.edit', compact('server'));
+        return view('admin.servers.edit', compact('server', 'games', 'categories'));
     }
 
     /**
@@ -80,25 +86,24 @@ class ServerController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\Response
      */
     public
-    function update(Request $request, $id)
-    {
+    function update(
+        ServerRequest $request,
+        $id
+    ) {
         // validate
-        $request->validate([
-            'name' => 'required',
-            'ip' => 'required',
-            'port' => 'required',
-            'img' => 'required',
-        ]);
+        $validated = $request->validated();
 
         // process
         $server = Server::find($id);
-        $server->name = $request->get('name');
-        $server->ip = $request->get('ip');
-        $server->port = $request->get('port');
-        $server->img = $request->get('img');
+        $server->name = $validated['name'];
+        $server->ip = $validated['ip'];
+        $server->port = $validated['port'];
+        $server->img = $validated['img'];
+        $server->game_id = $validated['game_id'];
+        $server->category_id = $validated['category_id'];
         $server->save();
         ProcessServers::dispatch();
 
@@ -112,8 +117,9 @@ class ServerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public
-    function destroy($id)
-    {
+    function destroy(
+        $id
+    ) {
         $server = Server::find($id);
         $server->delete();
         ProcessServers::dispatch();
