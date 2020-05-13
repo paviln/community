@@ -29,7 +29,7 @@ class ServerRequest extends FormRequest
             'port' => 'required|integer|min:10|max:99999999',
             'img' => 'required',
             'game_id' => 'required|exists:App\Models\Game,id',
-            'category_id' => 'required|exists:App\Models\Category,id|CategoryBelongsToGame'
+            'category_id' => 'required|exists:App\Models\Category,id'
         ];
     }
 

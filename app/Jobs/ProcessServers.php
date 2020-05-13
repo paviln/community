@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Game;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,7 +9,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
+
 use xPaw\SourceQuery\SourceQuery;
+
+use App\Models\Game;
+
 
 class ProcessServers implements ShouldQueue
 {
@@ -33,49 +36,68 @@ class ProcessServers implements ShouldQueue
      */
     public function handle(Game $gameModel)
     {
-        $platforms = config('platforms');
-
-        // Retrieve games with at least one server
+        // Get all servers sorted as games with categories.
         $games = $gameModel->with([
             'categories' => function ($query) {
                 $query->with('servers');
             }
-        ])->with([
-            'servers' => function ($query) {
-                $query->with('category');
-            }
-        ])->withCount('servers')->get();
+        ])->get();
 
+        // Remove categories with no servers.
+        foreach ($games as $game_id => $game) {
+            $has_server = false;
+            foreach ($game->categories as $category_id => $category) {
+                if (!count($category->servers)) {
+                    unset($game->categories[$category_id]);
+                } else {
+                    $has_server = true;
+                }
+            }
+            if (!$has_server) {
+                unset($games[$game_id]);
+            }
+        }
+
+        // Config supported platforms.
+        $platforms = config('platforms');
+
+        // Query servers to specific platform.
         foreach ($games as $game) {
-            if (isset($game->servers)) {
+            foreach ($game->categories as $categories) {
                 switch ($game->platform) {
                     case $platforms['Source']:
-                        $game->servers = $this->processSourceServers($game->servers);
+                        $categories->servers = $this->processSourceServers($categories->servers);
                         break;
                 }
             }
         }
 
+        // Save game servers in cache for 5 minutes.
         Cache::put('gameServers', $games, now()->addMinutes(5));
     }
 
+    /**
+     * Process source servers, using SourceQuery.
+     *
+     * @param $servers
+     * @return mixed
+     */
     private function processSourceServers($servers)
     {
         $sourceQuery = new SourceQuery();
-        foreach ($servers as $srv) {
+        foreach ($servers as $server) {
             try {
-                $sourceQuery->Connect($srv->ip, $srv->port, 5, SourceQuery::SOURCE);
-                $srv->info = $sourceQuery->GetInfo();
-                $srv->players = $sourceQuery->GetPlayers();
-                $srv->rules = $sourceQuery->GetRules();
-                $srv->ping = $sourceQuery->Ping();
+                $sourceQuery->Connect($server->ip, $server->port, 5, SourceQuery::SOURCE);
+                $server->info = $sourceQuery->GetInfo();
+                $server->players = $sourceQuery->GetPlayers();
+                $server->rules = $sourceQuery->GetRules();
+                $server->ping = $sourceQuery->Ping();
             } catch (Exception $e) {
                 continue;
             } finally {
                 $sourceQuery->Disconnect();
             }
         }
-
         return $servers;
     }
 }

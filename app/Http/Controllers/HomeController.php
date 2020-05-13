@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Game;
 use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
@@ -27,21 +26,12 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function servers(Game $game)
+    public function servers()
     {
         if (Cache::has('gameServers')) {
             $games = Cache::get('gameServers');
         } else {
-            // Retrieve games with at least one server
-            $games = $game->with([
-                'categories' => function ($query) {
-                    $query->with('servers');
-                }
-            ])->with([
-                'servers' => function ($query) {
-                    $query->with('category');
-                }
-            ])->withCount('servers')->get();
+            $games = false;
         }
 
         return view('servers', compact('games'));
