@@ -79,7 +79,17 @@
                         </h6>
                         <li class="nav-item">
                             <a class="nav-link {{ Route::currentRouteNamed('admin.users.index') ? 'active' : '' }}"
-                               href="{{ route('admin.users.index') }}" href="{{ route('admin.users.index') }}">Users</a>
+                               href="{{ route('admin.users.index') }}">Users</a>
+                        </li>
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>Customization</span>
+                            <a class="link-secondary" href="#">
+                                <span data-feather="plus-circle"></span>
+                            </a>
+                        </h6>
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::currentRouteNamed('admin.theme') ? 'active' : '' }}"
+                               href="{{ route('admin.theme') }}">Theme</a>
                         </li>
                     </ul>
                 </div>
@@ -121,7 +131,9 @@
                         </button>
                     </div>
                 @endif
-                @yield('content')
+                <div class="container">
+                    @yield('content')
+                </div>
             </main>
         </div>
     </div>

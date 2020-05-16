@@ -27,5 +27,6 @@ Route::middleware('superuser')->name('admin.')->prefix('admin')->namespace('Admi
     Route::resource('categories', 'CategoryController');
     Route::resource('games', 'GameController');
     Route::resource('users', 'UserController');
+    Route::get('theme', 'ThemeController@index')->name('theme');
+    Route::post('theme.upload', 'ThemeController@upload')->name('theme.upload');
 });
-

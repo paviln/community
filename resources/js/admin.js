@@ -19,4 +19,11 @@ window.showCategories = function (elm) {
     }
 }
 
-
+$(document).ready(function () {
+    document.getElementById("theme-editor").style.display = "block";
+    var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+        mode: "text/css",
+        theme: "blackboard",
+        lineNumbers: true,
+    });
+});
