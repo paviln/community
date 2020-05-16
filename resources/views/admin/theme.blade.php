@@ -11,7 +11,8 @@
         </div>
     </div>
 
-    <form id="theme-editor" class="form w-100" method="post" action="{{ route('admin.theme.upload') }}"
+    <form id="theme-editor" class="form w-100" style="display: none" method="post"
+          action="{{ route('admin.theme.upload') }}"
           enctype="multipart/form-data">
         @csrf
         <div class="form-group">
