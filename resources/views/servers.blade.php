@@ -3,7 +3,6 @@
 @section('content')
     <div class="container">
         <h1 class="text-center">Servers</h1>
-        <?php dump($games); ?>
         @if($games)
             @foreach ($games as $game)
                 <h3 class="mt-3">{{ $game->name }}</h3>
@@ -50,7 +49,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php dump($server); ?>
                         @endforeach
                     @endforeach
                 </div>

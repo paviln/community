@@ -29,4 +29,6 @@ Route::middleware('superuser')->name('admin.')->prefix('admin')->namespace('Admi
     Route::resource('users', 'UserController');
     Route::get('theme', 'ThemeController@index')->name('theme');
     Route::post('theme.upload', 'ThemeController@upload')->name('theme.upload');
+    Route::get('setting', 'SettingController@index')->name('setting');
+    Route::patch('setting.update/{id}', 'SettingController@update')->name('setting.update');
 });

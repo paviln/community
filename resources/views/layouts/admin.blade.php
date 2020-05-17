@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('global.app_name', 'Community') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -23,7 +23,7 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark sticky-top bg-secondary flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 mr-auto px-3" href="{{ url('/') }}">
-            {{ config('app.name', 'Laravel') }}
+            {{ config('global.app_name', 'Community') }}
         </a>
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
                 data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
@@ -90,6 +90,10 @@
                         <li class="nav-item">
                             <a class="nav-link {{ Route::currentRouteNamed('admin.theme') ? 'active' : '' }}"
                                href="{{ route('admin.theme') }}">Theme</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::currentRouteNamed('admin.setting') ? 'active' : '' }}"
+                               href="{{ route('admin.setting') }}">Settings</a>
                         </li>
                     </ul>
                 </div>

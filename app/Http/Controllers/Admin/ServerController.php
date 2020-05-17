@@ -70,10 +70,8 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function edit(
-        $id
-    ) {
+    public function edit($id)
+    {
         $server = Server::find($id);
         $games = Game::all();
         $categories = Category::all();
@@ -88,11 +86,8 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function update(
-        ServerRequest $request,
-        $id
-    ) {
+    public function update(ServerRequest $request, $id)
+    {
         // validate
         $validated = $request->validated();
 
@@ -116,10 +111,8 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy(
-        $id
-    ) {
+    public function destroy($id)
+    {
         $server = Server::find($id);
         $server->delete();
         ProcessServers::dispatch();
