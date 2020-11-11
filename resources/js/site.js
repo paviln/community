@@ -15,7 +15,7 @@ window.filterCategory = function (elm) {
     } else {
         for (var i = 1; i < servers.length; i++) {
             if (servers[i].style) {
-                if (servers[i].classList.contains(category)) {
+                if (servers[i].getAttribute('data-categiry') === category) {
                     servers[i].style.display = "block";
                 } else {
                     servers[i].style.display = "none";

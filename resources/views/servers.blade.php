@@ -21,7 +21,6 @@
                 <div class="row justify-content-around">
                     @foreach ($game->categories as $category)
                         @foreach ($category->servers as $server)
-                        <?php dump($server) ?>
                             <div data-categiry="{{ $server->category_id }}"
                                  class="col-lg-4 {{ str_replace(' ', '_', $game->name) }}">
                                 <div
