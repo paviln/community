@@ -6,20 +6,20 @@
         <h1 class="h2">Servers</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a type="button" class="btn btn-sm btn-outline-secondary"
+                <a type="button" class="btn btn-sm btn-outline-success"
                    href="{{ route('admin.servers.create') }}">Add Server</a>
             </div>
             <div class="btn-group mr-2">
-                <a type="button" class="btn btn-sm btn-primary"
+                <a type="button" class="btn btn-sm btn-outline-primary"
                    href="{{ route('admin.games.index') }}">Manage Games</a>
             </div>
             <div class="btn-group mr-2">
-                <a type="button" class="btn btn-sm btn-primary"
+                <a type="button" class="btn btn-sm btn-outline-primary"
                    href="{{ route('admin.categories.index') }}">Manage Categories</a>
             </div>
         </div>
     </div>
-    <table class="table">
+    <table class="table table-bordered">
         <thead>
         <tr>
             <th scope="col">Name</th>

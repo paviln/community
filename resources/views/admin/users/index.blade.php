@@ -11,12 +11,12 @@
         <h1 class="h2">Users</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a type="button" class="btn btn-sm btn-outline-secondary"
+                <a type="button" class="btn btn-sm btn-outline-success"
                    href="{{ route('admin.users.create') }}">Create user</a>
             </div>
         </div>
     </div>
-    <table class="table">
+    <table class="table table-bordered">
         <thead>
         <tr>
             <th scope="col">Name</th>
