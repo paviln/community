@@ -19,36 +19,38 @@
             </div>
         </div>
     </div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Game</th>
-            <th scope="col">Category</th>
-            <th scope="col">Ip</th>
-            <th scope="col">Port</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($servers as $server)
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-bordered">
+            <thead class="thead-dark">
             <tr>
-                <td>{{ $server->name }}</td>
-                <td>{{ $server->game->name }}</td>
-                <td>{{ $server->category->name }}</td>
-                <td>{{ $server->ip }}</td>
-                <td>{{ $server->port }}</td>
-                <td>
-                    <a class="btn btn-primary float-left mr-2" href="{{ route('admin.servers.edit',$server->id)}}">Edit</a>
-                    <form class="float-left" action="{{ route('admin.servers.destroy', $server->id)}}"
-                          method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
-                </td>
+                <th scope="col">Name</th>
+                <th scope="col">Game</th>
+                <th scope="col">Category</th>
+                <th scope="col">Ip</th>
+                <th scope="col">Port</th>
+                <th scope="col">Actions</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach($servers as $server)
+                <tr>
+                    <td class="align-middle">{{ $server->name }}</td>
+                    <td class="align-middle">{{ $server->game->name }}</td>
+                    <td class="align-middle">{{ $server->category->name }}</td>
+                    <td class="align-middle">{{ $server->ip }}</td>
+                    <td class="align-middle">{{ $server->port }}</td>
+                    <td>
+                        <a class="btn btn-primary float-left mr-2" href="{{ route('admin.servers.edit',$server->id)}}">Edit</a>
+                        <form class="float-left" action="{{ route('admin.servers.destroy', $server->id)}}"
+                            method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

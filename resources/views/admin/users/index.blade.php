@@ -16,36 +16,38 @@
             </div>
         </div>
     </div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">E-Mail</th>
-            <th scope="col">Admin</th>
-            <th scope="col">Created at</th>
-            <th scope="col">Updated at</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($users as $user)
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-bordered">
+            <thead class="thead-dark">
             <tr>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->is_admin }}</td>
-                <td>{{ $user->created_at }}</td>
-                <td>{{ $user->updated_at }}</td>
-                <td>
-                    <a class="btn btn-primary float-left mr-2" href="{{ route('admin.users.edit',$user->id)}}">Edit</a>
-                    <form class="float-left" action="{{ route('admin.users.destroy', $user->id)}}"
-                          method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
-                </td>
+                <th scope="col">Name</th>
+                <th scope="col">E-Mail</th>
+                <th scope="col">Admin</th>
+                <th scope="col">Created at</th>
+                <th scope="col">Updated at</th>
+                <th scope="col">Actions</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach($users as $user)
+                <tr>
+                    <td class="align-middle">{{ $user->name }}</td>
+                    <td class="align-middle">{{ $user->email }}</td>
+                    <td class="align-middle">{{ $user->is_admin }}</td>
+                    <td class="align-middle">{{ $user->created_at }}</td>
+                    <td class="align-middle">{{ $user->updated_at }}</td>
+                    <td>
+                        <a class="btn btn-primary float-left mr-2" href="{{ route('admin.users.edit',$user->id)}}">Edit</a>
+                        <form class="float-left" action="{{ route('admin.users.destroy', $user->id)}}"
+                            method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection
